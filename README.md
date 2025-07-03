@@ -2,7 +2,7 @@
 
 **Welcome!**
 
-This script goes in tandem with [my website files](https://github.com/jethomps0n/My-Portfolio-Website). It offers an easy to navigate GUI interface for managing my [`data.json`]([https://github.com/jethomps0n/My-Portfolio-Website](https://github.com/jethomps0n/My-Portfolio-Website/blob/main/resources/json/data.json)) file, which contains the main content I promote on my website.
+This script goes in tandem with [my website files](https://github.com/jethomps0n/My-Portfolio-Website). It offers an easy to navigate GUI interface for managing my [`data.json`](https://github.com/jethomps0n/My-Portfolio-Website/blob/main/resources/json/data.json) file, which contains the main content I promote on my website.
 
 [On my website I promote my filmmaking content](https://itsjonathanthompson.com), from films to screenplays. So with that put into perspective, the only content I am displaying are either videos or PDFs.
 
