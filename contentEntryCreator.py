@@ -56,7 +56,7 @@ ENTRY_TYPES = [
 ]
 ENTRY_ROLES = [
     "Writer", "Editor", "Director", "Producer", "DP",
-    "Camera Operator", "Production Assistant", "Sound Recordist", "Actor"
+    "Camera Operator", "Production Assistant", "Sound Recordist", "Actor", "Gaffer"
 ]
 
 os.makedirs(PREVIEW_DIR, exist_ok=True)
