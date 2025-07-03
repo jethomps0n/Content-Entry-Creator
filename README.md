@@ -78,5 +78,3 @@ I'm going to be using this tool frequently, and I don't want to have to use the 
     /path/to/python3 /path/to/contentEntryCreator.py
     ```
 4. **Save and run the application**
-
----
