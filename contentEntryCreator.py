@@ -1541,6 +1541,7 @@ class TileEditor(tk.Toplevel):
         self.role_vars = []
         self.type_var = tk.StringVar()
         self.screenplay_var = tk.StringVar()
+        self.versioning_var = tk.StringVar()  # NEW: Add versioning variable
         self.credits = entry.get("credits", {}).copy() if entry.get("credits") else {}
         self.create_widgets()
 
@@ -1663,6 +1664,18 @@ class TileEditor(tk.Toplevel):
             rb.pack(side="left", padx=10)
         gridrow += 1
 
+        # NEW: Version History (full width)
+        tk.Label(content_frame, text="Version History:", anchor='w', **label_opts).grid(
+            row=gridrow, column=0, sticky='w', pady=2, padx=(0, 5))
+        versioning_frame = tk.Frame(content_frame, bg="#f8f8f8")
+        versioning_frame.grid(row=gridrow, column=1, columnspan=4, sticky='w', pady=2)
+        current_versioning = self.entry.get("versioning", "")
+        self.versioning_var.set(current_versioning)
+        for i, (label, val) in enumerate([("No", ""), ("Yes", "Yes"), ("Completed", "Completed")]):
+            rb = tk.Radiobutton(versioning_frame, text=label, variable=self.versioning_var, value=val, fg="black", bg="#f8f8f8")
+            rb.pack(side="left", padx=10)
+        gridrow += 1
+
         # FIXED BUTTON BAR AT BOTTOM
         button_bar = ttk.Frame(self)
         button_bar.pack(side='bottom', fill='x', pady=10, padx=10)
@@ -1697,6 +1710,7 @@ class TileEditor(tk.Toplevel):
         self.entry["credits"] = self.credits
         self.entry["type"] = self.type_var.get()
         self.entry["Screenplay"] = self.screenplay_var.get()
+        self.entry["versioning"] = self.versioning_var.get()  # NEW: Save versioning field
         self.on_save(self.entry)
         self.destroy()
 
@@ -1723,12 +1737,12 @@ class DataJsonViewer(ttk.Frame):
             tile.pack(fill='x', padx=6, pady=5)
             header = f"{entry.get('title', '(untitled)')} | {entry.get('slug', '')} | {entry.get('date', '')}"
             tk.Label(tile, text=header, font=("Arial", 12, "bold"), anchor='w', bg="#f4f4f4", fg="black").pack(anchor='w', padx=5)
-            for key in ["role", "type", "Screenplay"]:
+            for key in ["role", "type", "Screenplay", "versioning"]:  # NEW: Include versioning in display
                 value = entry.get(key, "")
                 if value:
                     tk.Label(tile, text=f"{key}: {value}", anchor='w', bg="#f4f4f4", fg="black").pack(anchor='w', padx=10)
             for key, value in entry.items():
-                if key not in ("title", "slug", "date", "role", "type", "Screenplay"):
+                if key not in ("title", "slug", "date", "role", "type", "Screenplay", "versioning"):  # NEW: Exclude versioning from generic display
                     tk.Label(tile, text=f"{key}: {str(value)[:100]}", anchor='w', bg="#f4f4f4", fg="#333").pack(anchor='w', padx=10)
             btns = tk.Frame(tile, bg="#f4f4f4")
             btns.pack(anchor='sw', side='bottom', padx=8, pady=2, fill='x')
@@ -1914,6 +1928,18 @@ class ContentEntryCreatorApp(UniversalScrollMixin, tk.Tk):
         self.screenplay_var = tk.StringVar(value="")
         for i, (label, val) in enumerate([("None", ""), ("Yes", "Yes"), ("Sole", "Sole")]):
             rb = tk.Radiobutton(screenplay_container, text=label, variable=self.screenplay_var, value=val, fg="black", bg="#f8f8f8")
+            rb.pack(side="left", padx=15)
+        gridrow += 1
+
+        # NEW: Version History section (full width)
+        tk.Label(form_container, text="Version History:", anchor='w', fg="black", bg="#f8f8f8").grid(
+            row=gridrow, column=0, sticky='w', pady=(10, 2), padx=(0, 5))
+        versioning_container = tk.Frame(form_container, bg="#f8f8f8")
+        versioning_container.grid(row=gridrow, column=1, columnspan=4, sticky='w', pady=(10, 2))
+        
+        self.versioning_var = tk.StringVar(value="")  # Default to "No" (empty string)
+        for i, (label, val) in enumerate([("No", ""), ("Yes", "Yes"), ("Completed", "Completed")]):
+            rb = tk.Radiobutton(versioning_container, text=label, variable=self.versioning_var, value=val, fg="black", bg="#f8f8f8")
             rb.pack(side="left", padx=15)
         gridrow += 1
 
@@ -2237,7 +2263,8 @@ class ContentEntryCreatorApp(UniversalScrollMixin, tk.Tk):
                             "description": desc,
                             "credits": {},
                             "type": "",
-                            "Screenplay": ""
+                            "Screenplay": "",
+                            "versioning": ""  # NEW: Add versioning field with default value
                         }
                         
                         debug_log(f"Created entry for: {title}")
@@ -2496,6 +2523,7 @@ class ContentEntryCreatorApp(UniversalScrollMixin, tk.Tk):
             var.set(False)
         self.type_var.set("")
         self.screenplay_var.set("")
+        self.versioning_var.set("")  # NEW: Clear versioning field
 
     def update_credits_label(self):
         if not self.credits:
@@ -2575,7 +2603,8 @@ class ContentEntryCreatorApp(UniversalScrollMixin, tk.Tk):
             "description": self.description_text.get(1.0, tk.END).rstrip(),
             "credits": self.credits.copy(),
             "type": self.type_var.get(),
-            "Screenplay": self.screenplay_var.get()
+            "Screenplay": self.screenplay_var.get(),
+            "versioning": self.versioning_var.get()  # NEW: Save versioning field
         }
         if not entry["title"] or not entry["slug"]:
             messagebox.showerror("Missing fields", "Title and slug are required.")
