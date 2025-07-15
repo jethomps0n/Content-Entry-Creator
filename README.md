@@ -58,7 +58,7 @@ wget https://raw.github.com/jethomps0n/Content-Entry-Creator/main/contentEntryCr
 
 Navigate to the script directory and run:
 ```sh
-python3 makeobject.py
+python3 contentEntryCreator.py
 ```
 
 Should be pretty simple from there. Folder/file paths and other commonly variable data can be modified near the top of the script.
